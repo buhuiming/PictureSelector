@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -44,4 +45,5 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${cfgs.okhttp}"
     implementation "androidx.recyclerview:recyclerview:${cfgs.version_recyclerview}"
     implementation "com.google.code.gson:gson:${cfgs.gson}"
+    implementation 'androidx.core:core-ktx:1.13.1'
 }

@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -30,6 +31,9 @@ android {
         abortOnError false
     }
     namespace "com.luck.picture.lib"
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 ext {
@@ -46,4 +50,5 @@ dependencies {
     implementation "androidx.exifinterface:exifinterface:${cfgs.exifinterface_version}"
     implementation "androidx.viewpager2:viewpager2:${cfgs.viewpage2}"
     implementation "androidx.constraintlayout:constraintlayout:${cfgs.constraintlayout}"
+    implementation 'androidx.core:core-ktx:1.13.1'
 }
