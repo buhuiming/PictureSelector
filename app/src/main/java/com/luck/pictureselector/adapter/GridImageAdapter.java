@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -21,6 +19,8 @@ import com.luck.pictureselector.listener.OnItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -157,15 +157,15 @@ public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.View
             if (chooseModel == SelectMimeType.ofAudio()) {
                 viewHolder.tvDuration.setVisibility(View.VISIBLE);
                 viewHolder.tvDuration.setCompoundDrawablesRelativeWithIntrinsicBounds
-                        (R.drawable.ps_ic_audio, 0, 0, 0);
+                        (com.luck.picture.lib.R.drawable.ps_ic_audio, 0, 0, 0);
 
             } else {
                 viewHolder.tvDuration.setCompoundDrawablesRelativeWithIntrinsicBounds
-                        (R.drawable.ps_ic_video, 0, 0, 0);
+                        (com.luck.picture.lib.R.drawable.ps_ic_video, 0, 0, 0);
             }
             viewHolder.tvDuration.setText(DateUtils.formatDurationTime(duration));
             if (chooseModel == SelectMimeType.ofAudio()) {
-                viewHolder.mImg.setImageResource(R.drawable.ps_audio_placeholder);
+                viewHolder.mImg.setImageResource(com.luck.picture.lib.R.drawable.ps_audio_placeholder);
             } else {
                 Glide.with(viewHolder.itemView.getContext())
                         .load(PictureMimeType.isContent(path) && !media.isCut() && !media.isCompressed() ? Uri.parse(path)

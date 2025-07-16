@@ -1,3 +1,27 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://maven.aliyun.com/repository/jcenter" }
+    }
+}
+
+dependencyResolutionManagement {
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS) // 避免子模块忽略
+    repositories {
+        google()
+        mavenCentral()
+
+        //noinspection JcenterRepositoryObsolete
+        jcenter()
+        maven { url "https://maven.aliyun.com/repository/jcenter" }
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+rootProject.name = "PictureSelector"
 include ':app', ':selector',':ucrop',':compress'
 include ':camerax'
 include ':ijkplayer-java'

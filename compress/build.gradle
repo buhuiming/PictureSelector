@@ -1,20 +1,13 @@
-apply plugin: 'com.android.library'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-    }
+plugins {
+    id 'com.android.library'
 }
 
 android {
-    compileSdkVersion 27
+    compileSdk 27
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 27
+        minSdk 14
+        targetSdk 27
     }
     buildTypes {
         release {
@@ -22,6 +15,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        buildConfig true
+    }
+    namespace "top.zibin.luban"
 }
 
 ext {

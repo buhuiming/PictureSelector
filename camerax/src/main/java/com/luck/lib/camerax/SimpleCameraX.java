@@ -7,12 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import com.luck.lib.camerax.listener.OnSimpleXPermissionDeniedListener;
 import com.luck.lib.camerax.listener.OnSimpleXPermissionDescriptionListener;
 import com.luck.lib.camerax.utils.FileUtils;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 /**
  * @author：luck
