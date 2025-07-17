@@ -1,19 +1,28 @@
+apply plugin: 'maven-publish'
+
+def GROUP_ID = project.hasProperty('GROUP') ? GROUP : 'com.github.buhuiming'
+def ARTIFACT_ID = project.hasProperty('POM_ARTIFACT_ID') ? POM_ARTIFACT_ID : project.name
+def VERSION = project.hasProperty('VERSION_NAME') ? VERSION_NAME : '1.0.0'
+
+afterEvaluate {
+    publishing {
+        publications {
+            // 这个mavenJava可以随便填，只是一个任务名字而已
+            // MavenPublication必须有，这个是调用的任务类
+            mavenJava(MavenPublication) {
+                // 这里头是artifacts的配置信息，不填会采用默认的
+                groupId = GROUP_ID
+                artifactId = ARTIFACT_ID
+                version = VERSION
+
+                from components.release
+                artifact androidSourcesJar //打包源码，去除这行打的包将看不到源码
+            }
+        }
+    }
+}
 // 用于打包源代码的任务
-task androidSourcesJar(type: Jar) {
+tasks.register('androidSourcesJar', Jar) {
     archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
-}
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    archiveClassifier.set('javadoc')
-    from androidJavadocs.destinationDir
-}
-//解决 JavaDoc 中文注释生成失败的问题
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
 }
