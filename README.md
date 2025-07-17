@@ -1,3 +1,24 @@
+```sh
+repositories {
+  google()
+  mavenCentral()
+  maven { url 'https://jitpack.io' }
+}
+dependencies {
+  // PictureSelector basic (Necessary)
+  implementation 'com.github.buhuiming:PictureSelector:3.14.0'
+
+  // image compress library (Not necessary)
+  implementation 'com.github.buhuiming:compress:3.14.0'
+
+  // uCrop library (Not necessary)
+  implementation 'com.github.buhuiming:ucrop:3.14.0'
+
+  // simple camerax library (Not necessary)
+  implementation 'com.github.buhuiming:camerax:3.14.0'
+}
+```
+
 # PictureSelector 3.0 
    A PictureSelector for Android platform, which supports obtaining pictures, videos, audio & photos from photo albums, cutting (single picture or multi picture cutting), compression, theme custom configuration and other functions, and supports dynamic access & an open source picture selection framework suitable for Android 5.0 + system<br> 
    
