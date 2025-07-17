@@ -32,7 +32,7 @@ ext {
 
 ext.GROUP = "com.github.buhuiming"
 ext.POM_ARTIFACT_ID = "compress"
-ext.VERSION_NAME = "4.0.0"
+ext.VERSION_NAME = "3.12.0"
 //引用gradle_upload.gradle
 apply from: "${project.rootDir}/publish.gradle"
 
@@ -45,7 +45,7 @@ afterEvaluate {
                 // 这里头是artifacts的配置信息，不填会采用默认的
                 groupId = 'com.github.buhuiming'
                 artifactId = 'compress'
-                version = '4.0.0'
+                version = '3.12.0'
 
                 from components.release
                 artifact tasks.named('compress').get() //打包源码，去除这行打的包将看不到源码
