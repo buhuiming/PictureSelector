@@ -16,9 +16,15 @@ afterEvaluate {
                 version = VERSION
 
                 from components.release
-                artifact androidSourcesJar //打包源码，去除这行打的包将看不到源码
+                if (!project.plugins.hasPlugin('kotlin-android')) {
+                    artifact tasks.named("androidSourcesJar").get()
+                }
             }
         }
+    }
+    // 显式声明任务依赖关系
+    tasks.matching { it.name.startsWith("generateMetadataFileFor") }.configureEach {
+        dependsOn tasks.named("androidSourcesJar")
     }
 }
 // 用于打包源代码的任务
