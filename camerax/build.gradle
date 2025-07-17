@@ -55,7 +55,7 @@ afterEvaluate {
                 version = '4.0.0'
 
                 from components.release
-                artifact camerax //打包源码，去除这行打的包将看不到源码
+                artifact tasks.named('camerax').get() //打包源码，去除这行打的包将看不到源码
             }
         }
     }
