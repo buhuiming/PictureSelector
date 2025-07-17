@@ -6,16 +6,16 @@ repositories {
 }
 dependencies {
   // PictureSelector basic (Necessary)
-  implementation 'com.github.buhuiming:PictureSelector:3.14.0'
+  implementation 'com.github.buhuiming.PictureSelector:PictureSelector:3.14.0'
 
   // image compress library (Not necessary)
-  implementation 'com.github.buhuiming:compress:3.14.0'
+  implementation 'com.github.buhuiming.PictureSelector:compress:3.14.0'
 
   // uCrop library (Not necessary)
-  implementation 'com.github.buhuiming:ucrop:3.14.0'
+  implementation 'com.github.buhuiming.PictureSelector:ucrop:3.14.0'
 
   // simple camerax library (Not necessary)
-  implementation 'com.github.buhuiming:camerax:3.14.0'
+  implementation 'com.github.buhuiming.PictureSelector:camerax:3.14.0'
 }
 ```
 
