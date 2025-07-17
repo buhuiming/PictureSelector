@@ -1,7 +1,7 @@
 ext {
     cfgs = [
-            versionCode                   : 93,
-            versionName                   : "v3.11.2",
+            versionCode                   : 3150,
+            versionName                   : "3.15.0",
 
             //open version control
             version_recyclerview          : "1.4.0",
