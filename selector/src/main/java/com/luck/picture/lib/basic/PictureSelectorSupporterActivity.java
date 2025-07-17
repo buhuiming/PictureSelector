@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import com.luck.picture.lib.PictureSelectorFragment;
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.config.SelectorConfig;
@@ -19,6 +14,11 @@ import com.luck.picture.lib.language.PictureLanguageUtils;
 import com.luck.picture.lib.style.PictureWindowAnimationStyle;
 import com.luck.picture.lib.style.SelectMainStyle;
 import com.luck.picture.lib.utils.StyleUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 /**
  * @author：luck
@@ -34,6 +34,7 @@ public class PictureSelectorSupporterActivity extends AppCompatActivity {
         initSelectorConfig();
         immersive();
         setContentView(R.layout.ps_activity_container);
+        immersiveAboveAPI35();
         setupFragment();
     }
 
@@ -53,6 +54,10 @@ public class PictureSelectorSupporterActivity extends AppCompatActivity {
             navigationBarColor = ContextCompat.getColor(this, R.color.ps_color_grey);
         }
         ImmersiveManager.immersiveAboveAPI23(this, statusBarColor, navigationBarColor, isDarkStatusBarBlack);
+    }
+
+    private void immersiveAboveAPI35() {
+        ImmersiveManager.navigationBarPadding(findViewById(R.id.support_container));
     }
 
     private void setupFragment() {

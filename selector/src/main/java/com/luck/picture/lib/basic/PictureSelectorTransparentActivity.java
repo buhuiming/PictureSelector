@@ -6,12 +6,6 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import com.luck.picture.lib.PictureOnlyCameraFragment;
 import com.luck.picture.lib.PictureSelectorPreviewFragment;
 import com.luck.picture.lib.PictureSelectorSystemFragment;
@@ -27,6 +21,12 @@ import com.luck.picture.lib.utils.StyleUtils;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 /**
  * @author：luck
  * @date：2022/2/10 6:07 下午
@@ -41,9 +41,8 @@ public class PictureSelectorTransparentActivity extends AppCompatActivity {
         initSelectorConfig();
         immersive();
         setContentView(R.layout.ps_empty);
-        if (isExternalPreview()) {
-            // TODO ignore
-        } else {
+        immersiveAboveAPI35();
+        if (!isExternalPreview()) {
             setActivitySize();
         }
         setupFragment();
@@ -73,6 +72,20 @@ public class PictureSelectorTransparentActivity extends AppCompatActivity {
             navigationBarColor = ContextCompat.getColor(this, R.color.ps_color_grey);
         }
         ImmersiveManager.immersiveAboveAPI23(this, statusBarColor, navigationBarColor, isDarkStatusBarBlack);
+    }
+
+    private void immersiveAboveAPI35() {
+        SelectMainStyle mainStyle = selectorConfig.selectorStyle.getSelectMainStyle();
+        int statusBarColor = mainStyle.getStatusBarColor();
+        int navigationBarColor = mainStyle.getNavigationBarColor();
+        boolean isDarkStatusBarBlack = mainStyle.isDarkStatusBarBlack();
+        ImmersiveManager.immersiveAboveAPI35(
+                this,
+                findViewById(R.id.rootView),
+                statusBarColor,
+                navigationBarColor,
+                isDarkStatusBarBlack
+        );
     }
 
     private void setupFragment() {

@@ -10,18 +10,106 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-
 import com.luck.picture.lib.utils.DensityUtil;
 
-/**
- * @author：luck
- * @data：2018/3/28 下午1:00
- * @描述: 沉浸式相关
- */
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
+/**
+ * @description 沉浸式相关
+ * @author Buhuiming
+ * @date 2025/7/17 9:53
+ */
 public class ImmersiveManager {
+
+    /**
+     * 设置状态栏和导航栏的padding
+     */
+    public static void statusBarAndNavigationBarPadding(View view) {
+        final int originalTopPadding = view.getPaddingTop();
+        final int originalLeftPadding = view.getPaddingLeft();
+        final int originalRightPadding = view.getPaddingRight();
+        final int originalBottomPadding = view.getPaddingBottom();
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            Insets statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+            Insets navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            v.setPadding(
+                    originalLeftPadding,
+                    statusBars.top + originalTopPadding,
+                    originalRightPadding,
+                    navBars.bottom + originalBottomPadding
+            );
+            return insets;
+        });
+        // 主动请求 Insets 分发，防止没有触发
+        ViewCompat.requestApplyInsets(view);
+    }
+
+    /**
+     * 设置状态栏的padding
+     */
+    public static void statusBarPadding(View view) {
+        final int originalTopPadding = view.getPaddingTop();
+        final int originalLeftPadding = view.getPaddingLeft();
+        final int originalRightPadding = view.getPaddingRight();
+        final int originalBottomPadding = view.getPaddingBottom();
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            Insets statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+            v.setPadding(
+                    originalLeftPadding,
+                    statusBars.top + originalTopPadding,
+                    originalRightPadding,
+                    originalBottomPadding
+            );
+            return insets;
+        });
+        // 主动请求 Insets 分发，防止没有触发
+        ViewCompat.requestApplyInsets(view);
+    }
+
+    /**
+     * 设置导航栏的padding
+     */
+    public static void navigationBarPadding(View view) {
+        final int originalTopPadding = view.getPaddingTop();
+        final int originalLeftPadding = view.getPaddingLeft();
+        final int originalRightPadding = view.getPaddingRight();
+        final int originalBottomPadding = view.getPaddingBottom();
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            Insets navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            v.setPadding(
+                    originalLeftPadding,
+                    originalTopPadding,
+                    originalRightPadding,
+                    navBars.bottom + originalBottomPadding
+            );
+            return insets;
+        });
+        // 主动请求 Insets 分发，防止没有触发
+        ViewCompat.requestApplyInsets(view);
+    }
+
+    public static void setDecorFitsSystemWindows(Activity activity, boolean decorFitsSystemWindows, boolean isDarkStatusBarIcon) {
+        WindowCompat.setDecorFitsSystemWindows(activity.getWindow(), decorFitsSystemWindows);
+        WindowInsetsControllerCompat controller =
+                WindowCompat.getInsetsController(activity.getWindow(), activity.getWindow().getDecorView());
+        controller.setAppearanceLightStatusBars(isDarkStatusBarIcon); // 状态栏图标为深色
+        controller.setAppearanceLightNavigationBars(isDarkStatusBarIcon); // 导航栏图标为深色
+    }
+
+    public static void immersiveAboveAPI35(Activity activity, View view, int statusBarColor, int navigationBarColor, boolean isDarkStatusBarIcon) {
+        setDecorFitsSystemWindows(activity, false, isDarkStatusBarIcon);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            //Android15设置无效
+            activity.getWindow().setStatusBarColor(statusBarColor); // 状态栏背景色
+            activity.getWindow().setNavigationBarColor(navigationBarColor); // 导航栏背景色
+        }
+        statusBarAndNavigationBarPadding(view);
+    }
 
     /**
      * 注意：使用最好将布局xml 跟布局加入    android:fitsSystemWindows="true" ，这样可以避免有些手机上布局顶边的问题

@@ -74,6 +74,7 @@ import com.luck.picture.lib.engine.VideoPlayerEngine;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
 import com.luck.picture.lib.entity.MediaExtraInfo;
+import com.luck.picture.lib.immersive.ImmersiveManager;
 import com.luck.picture.lib.interfaces.OnBitmapWatermarkEventListener;
 import com.luck.picture.lib.interfaces.OnCallbackListener;
 import com.luck.picture.lib.interfaces.OnCameraInterceptListener;
@@ -209,6 +210,12 @@ public class MainActivity extends AppCompatActivity implements IBridgePictureBeh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ImmersiveManager.setDecorFitsSystemWindows(this, false, false);
+        ImmersiveManager.navigationBarPadding(findViewById(R.id.rootView));
+        ViewGroup.LayoutParams params = findViewById(R.id.barView).getLayoutParams();
+        params.height = DensityUtil.getStatusBarHeight();
+
         selectorStyle = new PictureSelectorStyle();
         ImageView minus = findViewById(R.id.minus);
         ImageView plus = findViewById(R.id.plus);

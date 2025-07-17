@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.luck.pictureselector"
-        minSdk 21
+        minSdk 26
         targetSdk 35
         versionCode cfgs.versionCode
         versionName cfgs.versionName
@@ -100,4 +100,7 @@ dependencies {
     implementation("io.coil-kt:coil:${cfgs.coil_version}")
     implementation("io.coil-kt:coil-gif:${cfgs.coil_version}")
     implementation("io.coil-kt:coil-video:${cfgs.coil_version}")
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.activity:activity-ktx:1.10.1'
+
 }

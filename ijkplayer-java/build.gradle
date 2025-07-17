@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 35
 
     lintOptions {
         abortOnError false
     }
     defaultConfig {
         minSdk 9
-        targetSdk 30
+        targetSdk 35
     }
     buildTypes {
         release {

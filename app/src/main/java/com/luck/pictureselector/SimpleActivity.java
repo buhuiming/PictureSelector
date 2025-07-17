@@ -1,9 +1,12 @@
 package com.luck.pictureselector;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.luck.picture.lib.immersive.ImmersiveManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +16,15 @@ public class SimpleActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
+        ImmersiveManager.immersiveAboveAPI35(
+                this,
+                findViewById(R.id.rootView),
+                Color.WHITE,
+                Color.WHITE,
+                true
+        );
+
+
         Button btn_activity = findViewById(R.id.btn_activity);
         Button btn_inject_fragment = findViewById(R.id.btn_inject_fragment);
         Button btn_only_query_data = findViewById(R.id.btn_only_query_data);

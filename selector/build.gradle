@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
-        minSdk 19
-        targetSdk 34
+        minSdk 26
+        targetSdk 35
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -51,4 +51,5 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:${cfgs.viewpage2}"
     implementation "androidx.constraintlayout:constraintlayout:${cfgs.constraintlayout}"
     implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.activity:activity-ktx:1.10.1'
 }
