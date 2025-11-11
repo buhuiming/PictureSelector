@@ -60,6 +60,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.BlendModeColorFilterCompat;
 import androidx.core.graphics.BlendModeCompat;
+import androidx.core.graphics.ColorUtils;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
@@ -136,7 +140,6 @@ public class UCropActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         immersive();
         setContentView(R.layout.ucrop_activity_photobox);
-        immersiveAboveAPI35();
         Intent intent = getIntent();
         setupViews(intent);
         setImageData(intent);
@@ -148,18 +151,8 @@ public class UCropActivity extends AppCompatActivity {
         Intent intent = getIntent();
         boolean isDarkStatusBarBlack = intent.getBooleanExtra(UCrop.Options.EXTRA_DARK_STATUS_BAR_BLACK, false);
         mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_statusbar));
-        ImmersiveManager.immersiveAboveAPI23(this, mStatusBarColor, mStatusBarColor, isDarkStatusBarBlack);
-    }
-
-    private void immersiveAboveAPI35() {
-        Intent intent = getIntent();
-        boolean isDarkStatusBarBlack = intent.getBooleanExtra(UCrop.Options.EXTRA_DARK_STATUS_BAR_BLACK, false);
-        mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_statusbar));
-        ImmersiveManager.setDecorFitsSystemWindows(this, false, isDarkStatusBarBlack);
-        ImmersiveManager.navigationBarPadding(findViewById(R.id.ucrop_photobox));
-        ViewGroup.LayoutParams params = findViewById(R.id.barView).getLayoutParams();
-        params.height = DensityUtil.getStatusBarHeight(this);
-        findViewById(R.id.barView).setBackgroundColor(mStatusBarColor);
+        int navigationBarColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_ROOT_VIEW_BACKGROUND_COLOR, mStatusBarColor);
+        ImmersiveManager.immersiveAboveAPI23(this, mStatusBarColor, ColorUtils.setAlphaComponent(navigationBarColor, 1), isDarkStatusBarBlack);
     }
 
     @Override
@@ -368,6 +361,24 @@ public class UCropActivity extends AppCompatActivity {
             setupRotateWidget();
             setupScaleWidget();
             setupStatesWrapper();
+        }
+
+        boolean isDarkStatusBarBlack = intent.getBooleanExtra(UCrop.Options.EXTRA_DARK_STATUS_BAR_BLACK, false);
+        mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_statusbar));
+        ImmersiveManager.setDecorFitsSystemWindows(this, false, isDarkStatusBarBlack);
+        ViewGroup.LayoutParams params = findViewById(R.id.barView).getLayoutParams();
+        params.height = DensityUtil.getStatusBarHeight(this);
+        findViewById(R.id.barView).setBackgroundColor(mStatusBarColor);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View bottomBarView = findViewById(R.id.bottomBarView);
+            ViewCompat.setOnApplyWindowInsetsListener(bottomBarView, (v, insets) -> {
+                Insets navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                bottomBarView.getLayoutParams().height = navBars.bottom;
+                return insets;
+            });
+            ViewCompat.requestApplyInsets(bottomBarView);
+            int navigationBarColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_ROOT_VIEW_BACKGROUND_COLOR, mStatusBarColor);
+            bottomBarView.setBackgroundColor(ColorUtils.setAlphaComponent(navigationBarColor, 1));
         }
     }
 

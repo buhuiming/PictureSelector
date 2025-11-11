@@ -35,6 +35,21 @@
         <item name="android:backgroundDimAmount">0.4</item>
     </style>
 
+    <!-- 弹窗主题 -->
+    <style name="PictureThemeDialogFragmentAnimTheme" parent="android:Theme.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <!--背景颜色及和透明程度-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--是否去除标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否模糊-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowMinWidthMajor">50%</item>
+        <item name="android:windowMinWidthMinor">50%</item>
+    </style>
+
     <style name="PictureThemeDialogFragmentAnim" mce_bogus="1" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/ps_anim_up_in</item>
         <item name="android:windowExitAnimation">@anim/ps_anim_down_out</item>

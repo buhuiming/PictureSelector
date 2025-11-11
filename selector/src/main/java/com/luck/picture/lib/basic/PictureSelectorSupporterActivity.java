@@ -34,7 +34,6 @@ public class PictureSelectorSupporterActivity extends AppCompatActivity {
         initSelectorConfig();
         immersive();
         setContentView(R.layout.ps_activity_container);
-        immersiveAboveAPI35();
         setupFragment();
     }
 
@@ -47,17 +46,18 @@ public class PictureSelectorSupporterActivity extends AppCompatActivity {
         int statusBarColor = mainStyle.getStatusBarColor();
         int navigationBarColor = mainStyle.getNavigationBarColor();
         boolean isDarkStatusBarBlack = mainStyle.isDarkStatusBarBlack();
+        int bottomBarBackgroundColor = selectorConfig.selectorStyle.getBottomBarStyle().getBottomNarBarBackgroundColor();
         if (!StyleUtils.checkStyleValidity(statusBarColor)) {
             statusBarColor = ContextCompat.getColor(this, R.color.ps_color_grey);
         }
         if (!StyleUtils.checkStyleValidity(navigationBarColor)) {
-            navigationBarColor = ContextCompat.getColor(this, R.color.ps_color_grey);
+            if (StyleUtils.checkStyleValidity(bottomBarBackgroundColor)) {
+                navigationBarColor = bottomBarBackgroundColor;
+            } else {
+                navigationBarColor = ContextCompat.getColor(this, R.color.ps_color_grey);
+            }
         }
         ImmersiveManager.immersiveAboveAPI23(this, statusBarColor, navigationBarColor, isDarkStatusBarBlack);
-    }
-
-    private void immersiveAboveAPI35() {
-        ImmersiveManager.navigationBarPadding(findViewById(R.id.support_container));
     }
 
     private void setupFragment() {

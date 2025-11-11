@@ -51,6 +51,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.BlendModeColorFilterCompat;
 import androidx.core.graphics.BlendModeCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -103,7 +106,9 @@ public class UCropMultipleActivity extends AppCompatActivity implements UCropFra
         Intent intent = getIntent();
         boolean isDarkStatusBarBlack = intent.getBooleanExtra(UCrop.Options.EXTRA_DARK_STATUS_BAR_BLACK, false);
         mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_statusbar));
-        ImmersiveManager.immersiveAboveAPI23(this, mStatusBarColor, mStatusBarColor, isDarkStatusBarBlack);
+        int galleryBarBackground = getIntent().getIntExtra(UCrop.Options.EXTRA_GALLERY_BAR_BACKGROUND,
+                ContextCompat.getColor(this, R.color.ucrop_color_widget_background));
+        ImmersiveManager.immersiveAboveAPI23(this, mStatusBarColor, galleryBarBackground, isDarkStatusBarBlack);
     }
 
     private void immersiveAboveAPI35() {
@@ -111,7 +116,6 @@ public class UCropMultipleActivity extends AppCompatActivity implements UCropFra
         boolean isDarkStatusBarBlack = intent.getBooleanExtra(UCrop.Options.EXTRA_DARK_STATUS_BAR_BLACK, false);
         mStatusBarColor = intent.getIntExtra(UCrop.Options.EXTRA_STATUS_BAR_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_statusbar));
         ImmersiveManager.setDecorFitsSystemWindows(this, false, isDarkStatusBarBlack);
-        ImmersiveManager.navigationBarPadding(findViewById(R.id.ucrop_multiple));
         ViewGroup.LayoutParams params = findViewById(R.id.barView).getLayoutParams();
         params.height = DensityUtil.getStatusBarHeight(this);
         findViewById(R.id.barView).setBackgroundColor(mStatusBarColor);
@@ -251,6 +255,12 @@ public class UCropMultipleActivity extends AppCompatActivity implements UCropFra
         int galleryBarBackground = getIntent().getIntExtra(UCrop.Options.EXTRA_GALLERY_BAR_BACKGROUND,
                 R.drawable.ucrop_gallery_bg);
         galleryRecycle.setBackgroundResource(galleryBarBackground);
+        ViewCompat.setOnApplyWindowInsetsListener(galleryRecycle, (v, insets) -> {
+            Insets navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            galleryRecycle.setPadding(0, 0, 0, navBars.bottom);
+            return insets;
+        });
+        ViewCompat.requestApplyInsets(galleryRecycle);
         galleryAdapter = new UCropGalleryAdapter(uCropSupportList);
         galleryAdapter.setOnItemClickListener(new UCropGalleryAdapter.OnItemClickListener() {
             @Override

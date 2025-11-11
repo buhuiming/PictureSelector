@@ -95,6 +95,10 @@ public class ImmersiveManager {
 
     public static void setDecorFitsSystemWindows(Activity activity, boolean decorFitsSystemWindows, boolean isDarkStatusBarIcon) {
         WindowCompat.setDecorFitsSystemWindows(activity.getWindow(), decorFitsSystemWindows);
+        setDarkStatusBarIcon(activity, isDarkStatusBarIcon);
+    }
+
+    public static void setDarkStatusBarIcon(Activity activity, boolean isDarkStatusBarIcon) {
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(activity.getWindow(), activity.getWindow().getDecorView());
         controller.setAppearanceLightStatusBars(isDarkStatusBarIcon); // 状态栏图标为深色

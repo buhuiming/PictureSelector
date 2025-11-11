@@ -2,13 +2,17 @@ package com.luck.picture.lib;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +20,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -248,6 +255,7 @@ public class PictureSelectorFragment extends PictureCommonFragment
         initComplete();
         initRecycler(view);
         initBottomNavBar();
+        immersiveAboveAPI35((ViewGroup) view);
         if (isMemoryRecycling) {
             recoverSaveInstanceData();
         } else {
@@ -255,6 +263,42 @@ public class PictureSelectorFragment extends PictureCommonFragment
         }
     }
 
+    private void immersiveAboveAPI35(ViewGroup rootView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View navBarView = new View(requireContext());
+            navBarView.setId(R.id.ps_nav_bar_id);
+            rootView.addView(navBarView);
+            ViewGroup.LayoutParams layoutParams = navBarView.getLayoutParams();
+            if (layoutParams instanceof ConstraintLayout.LayoutParams) {
+                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) layoutParams;
+                params1.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+                params1.height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+                params1.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+                params1.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+                params1.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+                ((ConstraintLayout.LayoutParams) bottomNarBar.getLayoutParams()).bottomToTop = R.id.ps_nav_bar_id;
+            }
+            SelectMainStyle mainStyle = selectorConfig.selectorStyle.getSelectMainStyle();
+            int navigationBarColor = mainStyle.getNavigationBarColor();
+            int bottomBarBackgroundColor = selectorConfig.selectorStyle.getBottomBarStyle().getBottomNarBarBackgroundColor();
+            if (!StyleUtils.checkStyleValidity(navigationBarColor)) {
+                if (StyleUtils.checkStyleValidity(bottomBarBackgroundColor)) {
+                    navigationBarColor = bottomBarBackgroundColor;
+                } else {
+                    navigationBarColor = ContextCompat.getColor(requireContext(), R.color.ps_color_grey);
+                }
+            }
+            navBarView.setBackgroundColor(navigationBarColor);
+            navBarView.setVisibility(View.VISIBLE);
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+                Insets navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                navBarView.getLayoutParams().height = navBars.bottom;
+                return insets;
+            });
+            // 主动请求 Insets 分发，防止没有触发
+            ViewCompat.requestApplyInsets(rootView);
+        }
+    }
 
     @Override
     public void onFragmentResume() {

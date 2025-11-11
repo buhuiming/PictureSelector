@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
@@ -24,18 +25,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.viewpager2.widget.MarginPageTransformer;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.luck.picture.lib.adapter.PicturePreviewAdapter;
 import com.luck.picture.lib.adapter.holder.BasePreviewHolder;
@@ -83,6 +72,21 @@ import com.luck.picture.lib.widget.TitleBar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.viewpager2.widget.MarginPageTransformer;
+import androidx.viewpager2.widget.ViewPager2;
 
 /**
  * @author：luck
@@ -151,6 +155,8 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
 
     protected CompleteSelectView completeSelectView;
 
+    private View navBarView;
+
     protected boolean needScaleBig = true;
 
     protected boolean needScaleSmall = false;
@@ -179,7 +185,6 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
      * 内部预览
      *
      * @param isBottomPreview 是否顶部预览进来的
-     * @param currentAlbum    当前预览的目录
      * @param isShowCamera    是否有显示拍照图标
      * @param position        预览下标
      * @param totalNum        当前预览总数
@@ -270,7 +275,68 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
             initPreviewSelectGallery((ViewGroup) view);
             initComplete();
         }
+        immersiveAboveAPI35((ViewGroup) view);
         iniMagicalView();
+    }
+
+    private void immersiveAboveAPI35(ViewGroup rootView) {
+        SelectMainStyle mainStyle = selectorConfig.selectorStyle.getSelectMainStyle();
+        int navigationBarColor = mainStyle.getNavigationBarColor();
+        int bottomNarBarBackgroundColor = selectorConfig.selectorStyle.getBottomBarStyle().getBottomNarBarBackgroundColor();
+        int bottomPreviewNarBarBackgroundColor = selectorConfig.selectorStyle.getBottomBarStyle().getBottomPreviewNarBarBackgroundColor();
+        if (!StyleUtils.checkStyleValidity(navigationBarColor)) {
+            if (StyleUtils.checkStyleValidity(bottomPreviewNarBarBackgroundColor)) {
+                navigationBarColor = bottomPreviewNarBarBackgroundColor;
+            } else if (StyleUtils.checkStyleValidity(bottomNarBarBackgroundColor)) {
+                navigationBarColor = bottomNarBarBackgroundColor;
+            } else {
+                navigationBarColor = ContextCompat.getColor(requireContext(), R.color.ps_color_grey);
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            navBarView = new View(requireContext());
+            navBarView.setId(R.id.ps_nav_bar_id);
+            rootView.addView(navBarView);
+            ViewGroup.LayoutParams layoutParams = navBarView.getLayoutParams();
+            if (layoutParams instanceof ConstraintLayout.LayoutParams) {
+                ConstraintLayout.LayoutParams params1 = (ConstraintLayout.LayoutParams) layoutParams;
+                params1.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+                params1.height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+                params1.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+                params1.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+                params1.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+                ((ConstraintLayout.LayoutParams) bottomNarBar.getLayoutParams()).bottomToTop = R.id.ps_nav_bar_id;
+            }
+            navBarView.setBackgroundColor(navigationBarColor);
+            navBarView.setVisibility(View.VISIBLE);
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+                Insets navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                navBarView.getLayoutParams().height = navBars.bottom;
+                return insets;
+            });
+            // 主动请求 Insets 分发，防止没有触发
+            ViewCompat.requestApplyInsets(rootView);
+        } else {
+            requireActivity().getWindow().setNavigationBarColor(navigationBarColor);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            SelectMainStyle mainStyle = selectorConfig.selectorStyle.getSelectMainStyle();
+            int navigationBarColor = mainStyle.getNavigationBarColor();
+            int bottomNarBarBackgroundColor = selectorConfig.selectorStyle.getBottomBarStyle().getBottomNarBarBackgroundColor();
+            if (!StyleUtils.checkStyleValidity(navigationBarColor)) {
+                if (StyleUtils.checkStyleValidity(bottomNarBarBackgroundColor)) {
+                    navigationBarColor = bottomNarBarBackgroundColor;
+                } else {
+                    navigationBarColor = ContextCompat.getColor(requireContext(), R.color.ps_color_grey);
+                }
+            }
+            requireActivity().getWindow().setNavigationBarColor(navigationBarColor);
+        }
     }
 
     /**
@@ -998,6 +1064,7 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
             });
             mItemTouchHelper.attachToRecyclerView(mGalleryRecycle);
             mGalleryAdapter.setItemLongClickListener(new PreviewGalleryAdapter.OnItemLongClickListener() {
+                @SuppressLint("MissingPermission")
                 @Override
                 public void onItemLongClick(RecyclerView.ViewHolder holder, int position, View v) {
                     Vibrator vibrator = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
@@ -1310,6 +1377,9 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
         float titleBarTo = isAnimInit ? -titleBar.getHeight() : 0;
         float alphaForm = isAnimInit ? 1.0F : 0.0F;
         float alphaTo = isAnimInit ? 0.0F : 1.0F;
+        if (navBarView != null) {
+            set.playTogether(ObjectAnimator.ofFloat(navBarView, "alpha", alphaForm, alphaTo));
+        }
         for (int i = 0; i < mAnimViews.size(); i++) {
             View view = mAnimViews.get(i);
             set.playTogether(ObjectAnimator.ofFloat(view, "alpha", alphaForm, alphaTo));
@@ -1334,6 +1404,9 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
                                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
                         window.setAttributes(lp);
                         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                        if (navBarView != null) {
+                            navBarView.setVisibility(View.GONE);
+                        }
                     } else {
                         lp.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
                         window.setAttributes(lp);
@@ -1364,6 +1437,9 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
      * 隐藏全屏模式
      */
     private void hideFullScreenStatusBar() {
+        if (navBarView != null) {
+            navBarView.setVisibility(View.VISIBLE);
+        }
         for (int i = 0; i < mAnimViews.size(); i++) {
             mAnimViews.get(i).setEnabled(true);
         }

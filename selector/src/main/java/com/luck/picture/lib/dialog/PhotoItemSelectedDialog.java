@@ -2,24 +2,30 @@ package com.luck.picture.lib.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.luck.picture.lib.R;
+import com.luck.picture.lib.immersive.ImmersiveManager;
+import com.luck.picture.lib.interfaces.OnItemClickListener;
+import com.luck.picture.lib.utils.DensityUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import com.luck.picture.lib.R;
-import com.luck.picture.lib.interfaces.OnItemClickListener;
-import com.luck.picture.lib.utils.DensityUtil;
 
 /**
  * @author：luck
@@ -57,6 +63,11 @@ public class PhotoItemSelectedDialog extends DialogFragment implements View.OnCl
         tvPictureVideo.setOnClickListener(this);
         tvPicturePhoto.setOnClickListener(this);
         tvPictureCancel.setOnClickListener(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            ImmersiveManager.navigationBarPadding(view);
+        }
+        view.setClipToOutline(true);
+        view.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
     }
 
     @Override
@@ -71,6 +82,8 @@ public class PhotoItemSelectedDialog extends DialogFragment implements View.OnCl
     private void initDialogStyle() {
         Dialog dialog = getDialog();
         if (dialog != null) {
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setCancelable(true);
             Window window = dialog.getWindow();
             if (window != null) {
                 window.setLayout(DensityUtil.getRealScreenWidth(getContext()), RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -78,6 +91,34 @@ public class PhotoItemSelectedDialog extends DialogFragment implements View.OnCl
                 window.setWindowAnimations(R.style.PictureThemeDialogFragmentAnim);
             }
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_TITLE, R.style.PictureThemeDialogFragmentAnimTheme);
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        try {
+            //noinspection deprecation
+            dialog.getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                            | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            );
+
+            dialog.getWindow().setNavigationBarColor(Color.WHITE);
+            dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        } catch (Exception e) {
+            Log.e("PhotoDialog", Log.getStackTraceString(e));
+        }
+
+        return dialog;
     }
 
     private OnItemClickListener onItemClickListener;

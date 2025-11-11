@@ -5,10 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import com.luck.picture.lib.PictureSelectorFragment;
 import com.luck.picture.lib.app.PictureAppMaster;
 import com.luck.picture.lib.basic.IBridgePictureBehavior;
@@ -20,9 +16,15 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.MediaExtraInfo;
 import com.luck.picture.lib.immersive.ImmersiveManager;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
+import com.luck.picture.lib.style.PictureSelectorStyle;
+import com.luck.picture.lib.style.SelectMainStyle;
 import com.luck.picture.lib.utils.MediaUtils;
 
 import java.util.ArrayList;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 /**
  * @author：luck
@@ -32,14 +34,19 @@ import java.util.ArrayList;
 public class InjectFragmentActivity extends AppCompatActivity implements IBridgePictureBehavior {
     private final static String TAG = "PictureSelectorTag";
     private TextView tvResult;
+    private PictureSelectorStyle pictureSelectorStyle = new PictureSelectorStyle();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int navigationBarColor = ContextCompat.getColor(this, com.luck.picture.lib.R.color.ps_color_grey);
         int color = ContextCompat.getColor(this, R.color.app_color_white);
-        ImmersiveManager.immersiveAboveAPI23(this, color, color, true);
+        ImmersiveManager.immersiveAboveAPI23(this, color, navigationBarColor, true);
+        ImmersiveManager.setDarkStatusBarIcon(this, true);
         setContentView(R.layout.activity_inject_fragment);
         tvResult = findViewById(R.id.tv_result);
+        SelectMainStyle bottomNavBarStyle = pictureSelectorStyle.getSelectMainStyle();
+        bottomNavBarStyle.setNavigationBarColor(navigationBarColor);
         findViewById(R.id.tvb_inject_fragment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,6 +54,7 @@ public class InjectFragmentActivity extends AppCompatActivity implements IBridge
                 PictureSelector.create(v.getContext())
                         .openGallery(SelectMimeType.ofAll())
                         .setImageEngine(GlideEngine.createGlideEngine())
+                        .setSelectorUIStyle(pictureSelectorStyle)
                         .buildLaunch(R.id.fragment_container, new OnResultCallbackListener<LocalMedia>() {
                             @Override
                             public void onResult(ArrayList<LocalMedia> result) {
@@ -70,6 +78,7 @@ public class InjectFragmentActivity extends AppCompatActivity implements IBridge
                 PictureSelectorFragment selectorFragment = PictureSelector.create(v.getContext())
                         .openGallery(SelectMimeType.ofAll())
                         .setImageEngine(GlideEngine.createGlideEngine())
+                        .setSelectorUIStyle(pictureSelectorStyle)
                         .build();
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, selectorFragment, selectorFragment.getFragmentTag())

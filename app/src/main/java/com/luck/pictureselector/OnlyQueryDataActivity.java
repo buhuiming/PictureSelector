@@ -18,6 +18,7 @@ import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
+import com.luck.picture.lib.immersive.ImmersiveManager;
 import com.luck.picture.lib.interfaces.OnQueryAllAlbumListener;
 import com.luck.picture.lib.interfaces.OnQueryDataSourceListener;
 import com.luck.picture.lib.loader.IBridgeMediaLoader;
@@ -31,6 +32,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -47,6 +49,10 @@ public class OnlyQueryDataActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_only_query_data);
+        int color = ContextCompat.getColor(this, R.color.app_color_white);
+        ImmersiveManager.immersiveAboveAPI23(this, color, color, true);
+        ImmersiveManager.setDarkStatusBarIcon(this, true);
+        ImmersiveManager.statusBarAndNavigationBarPadding(findViewById(R.id.recycler));
         RecyclerPreloadView mRecycler = findViewById(R.id.recycler);
         mRecycler.addItemDecoration(new GridSpacingItemDecoration(4,
                 DensityUtil.dip2px(this, 1), false));
