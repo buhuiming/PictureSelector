@@ -49,6 +49,18 @@ public class LocaleTransform {
             case LanguageConfig.KK:
                 // 哈萨克斯坦
                 return new Locale("kk", "rKZ");
+            case LanguageConfig.ID:
+                // 印度尼西亚
+                return new Locale("id");
+            case LanguageConfig.IT:
+                // 意大利
+                return Locale.ITALIAN;
+            case LanguageConfig.MS:
+                // 马来西亚
+                return new Locale("ms");
+            case LanguageConfig.TH:
+                // 泰语
+                return new Locale("th");
             default:
                 // 简体中文
                 return Locale.CHINESE;

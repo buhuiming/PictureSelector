@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ucrop_gif_tag">gif</string>
+    <string name="ucrop_label_original">ต้นฉบับ</string>
+    <string name="ucrop_label_edit_photo">แก้ไขรูปภาพ</string>
+    <string name="ucrop_menu_crop">ครอป</string>
+    <string name="ucrop_rotate">หมุน</string>
+    <string name="ucrop_scale">ปรับขนาด</string>
+    <string name="ucrop_crop">ครอป</string>
+    <string name="ucrop_not_crop">ไม่รองรับประเภทการครอปนี้</string>
+</resources>

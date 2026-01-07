@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="picture_recording_time_is_short">La durata della registrazione è troppo breve</string>
+    <string name="picture_photo_camera">Tocca per scattare una foto, tieni premuto per registrare</string>
+    <string name="picture_photo_pictures">Tocca per scattare una foto</string>
+    <string name="picture_photo_recording">Tieni premuto per registrare</string>
+</resources>

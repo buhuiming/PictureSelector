@@ -5,5 +5,8 @@
 
     <string name="ucrop_menu_crop">切り取り</string>
     <string name="ucrop_gif_tag">gif図</string>
+    <string name="ucrop_rotate">回転</string>
+    <string name="ucrop_scale">拡大・縮小</string>
+    <string name="ucrop_crop">切り抜き</string>
     <string name="ucrop_not_crop">サポートされていないクリップタイプ</string>
 </resources>

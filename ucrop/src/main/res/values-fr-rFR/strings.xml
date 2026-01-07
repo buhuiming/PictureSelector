@@ -4,5 +4,8 @@
     <string name="ucrop_label_edit_photo">Modifier la photo</string>
     <string name="ucrop_menu_crop">Recadrer</string>
     <string name="ucrop_gif_tag">Bouge fig</string>
+    <string name="ucrop_rotate">Pivoter</string>
+    <string name="ucrop_scale">Redimensionner</string>
+    <string name="ucrop_crop">Rogner</string>
     <string name="ucrop_not_crop">Type de coupe non pris en charge</string>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="picture_recording_time_is_short">Durasi perekaman terlalu singkat</string>
+    <string name="picture_photo_camera">Ketuk untuk mengambil foto, tekan dan tahan untuk merekam</string>
+    <string name="picture_photo_pictures">Ketuk untuk mengambil foto</string>
+    <string name="picture_photo_recording">Tekan dan tahan untuk merekam</string>
+</resources>

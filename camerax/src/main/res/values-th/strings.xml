@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="picture_recording_time_is_short">ระยะเวลาการบันทึกสั้นเกินไป</string>
+    <string name="picture_photo_camera">แตะเพื่อถ่ายภาพ กดค้างเพื่อบันทึกวิดีโอ</string>
+    <string name="picture_photo_pictures">แตะเพื่อถ่ายภาพ</string>
+    <string name="picture_photo_recording">กดค้างเพื่อบันทึกวิดีโอ</string>
+</resources>
