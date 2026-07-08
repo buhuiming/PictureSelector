@@ -180,6 +180,11 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
         return TAG;
     }
 
+    @Override
+    protected boolean shouldApplyTranslucentStatusBar() {
+        return selectorConfig.isPreviewFullScreenMode && !isExternalPreview;
+    }
+
 
     /**
      * 内部预览
@@ -294,6 +299,10 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            if (isExternalPreview) {
+                // 外部预览全屏展示图片，无需底部导航栏占位，避免手势导航下与全屏切换冲突
+                return;
+            }
             navBarView = new View(requireContext());
             navBarView.setId(R.id.ps_nav_bar_id);
             rootView.addView(navBarView);
@@ -1391,27 +1400,14 @@ public class PictureSelectorPreviewFragment extends PictureCommonFragment {
         set.start();
         isAnimationStart = true;
         set.addListener(new AnimatorListenerAdapter() {
-            @SuppressLint("WrongConstant")
             @Override
             public void onAnimationEnd(Animator animation) {
                 isAnimationStart = false;
-                if (SdkVersionUtils.isP() && isAdded()) {
-                    Window window = requireActivity().getWindow();
-                    WindowManager.LayoutParams lp = window.getAttributes();
-                    if (isAnimInit) {
-                        lp.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-                        lp.layoutInDisplayCutoutMode =
-                                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-                        window.setAttributes(lp);
-                        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                        if (navBarView != null) {
-                            navBarView.setVisibility(View.GONE);
-                        }
-                    } else {
-                        lp.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                        window.setAttributes(lp);
-                        window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                    }
+                if (navBarView != null) {
+                    navBarView.setVisibility(isAnimInit ? View.GONE : View.VISIBLE);
+                }
+                if (magicalView != null) {
+                    magicalView.requestLayout();
                 }
             }
         });

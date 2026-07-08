@@ -39,7 +39,7 @@ ext {
 
 ext.GROUP = "com.github.buhuiming"
 ext.POM_ARTIFACT_ID = "ucrop"
-ext.VERSION_NAME = "3.15.2"
+ext.VERSION_NAME = "3.15.3"
 //引用gradle_upload.gradle
 apply from: "${project.rootDir}/publish.gradle"
 

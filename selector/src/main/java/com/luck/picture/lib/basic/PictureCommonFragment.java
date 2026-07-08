@@ -316,11 +316,15 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
     /**
      * 设置透明状态栏
      */
-    private void setTranslucentStatusBar() {
-        if (selectorConfig.isPreviewFullScreenMode) {
+    protected void setTranslucentStatusBar() {
+        if (shouldApplyTranslucentStatusBar()) {
             SelectMainStyle selectMainStyle = selectorConfig.selectorStyle.getSelectMainStyle();
             ImmersiveManager.translucentStatusBar(requireActivity(), selectMainStyle.isDarkStatusBarBlack());
         }
+    }
+
+    protected boolean shouldApplyTranslucentStatusBar() {
+        return selectorConfig.isPreviewFullScreenMode;
     }
 
     /**

@@ -41,8 +41,8 @@ public class PictureSelectorTransparentActivity extends AppCompatActivity {
         initSelectorConfig();
         immersive();
         setContentView(R.layout.ps_empty);
-        immersiveAboveAPI35();
         if (!isExternalPreview()) {
+            immersiveAboveAPI35();
             setActivitySize();
         }
         setupFragment();
